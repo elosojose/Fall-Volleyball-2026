@@ -1,391 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delano Recreation Center Schedule Portal</title>
-    <style>
-        /* Global Styles */
-        body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background-color: #f4f6f9;
-            color: #333333;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: #ffffff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        /* Branding Header */
-        .league-header {
-            border-bottom: 3px solid #ff5a00; /* Athletic Orange Accent */
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-        }
-        .league-header h1 {
-            margin: 0;
-            font-size: 28px;
-            color: #111111;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .league-header p {
-            margin: 5px 0 0 0;
-            color: #666666;
-            font-size: 14px;
-        }
-
-        /* Section Headings */
-        .section-title {
-            background-color: #111111;
-            color: #ffffff;
-            font-size: 14px;
-            font-weight: bold;
-            text-transform: uppercase;
-            padding: 10px 14px;
-            margin: 30px 0 20px 0;
-            border-left: 4px solid #ff5a00;
-            letter-spacing: 0.5px;
-        }
-
-        /* Forced Single Column Practice Card Layout */
-        .practice-column {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-bottom: 35px;
-        }
-        .practice-card {
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            padding: 16px;
-            background: #ffffff;
-        }
-        .division-header {
-            font-size: 16px;
-            font-weight: bold;
-            color: #ff5a00;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 6px;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-        .team-info-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            font-size: 14px;
-            border-bottom: 1px dashed #f0f0f0;
-        }
-        .team-info-row:last-child {
-            border-bottom: none;
-        }
-        .team-name {
-            font-weight: bold;
-            color: #111111;
-        }
-        .coach-name {
-            color: #666666;
-            font-size: 13px;
-        }
-        .practice-time {
-            font-weight: 600;
-            color: #222222;
-            background-color: #f0f4f8;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 13px;
-        }
-
-        /* Schedule Tables & Date Blocks */
-        .date-block {
-            margin-bottom: 35px;
-        }
-        .date-header {
-            font-weight: bold;
-            font-size: 16px;
-            padding: 8px 0;
-            margin-bottom: 10px;
-            color: #111111;
-            border-bottom: 1px solid #111111;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-        th {
-            background-color: #f8f9fa;
-            color: #555555;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            padding: 10px 14px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-        td {
-            padding: 14px 14px;
-            border-bottom: 1px solid #e0e0e0;
-            font-size: 14px;
-        }
-        tr:nth-child(even) td {
-            background-color: #f9fbfd;
-        }
-        tr:hover td {
-            background-color: #f1f3f5;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Delano Recreation Center Schedule Portal</title>
+<style>
+:root{
+  --bg:#f4f6f9; --card:#ffffff; --ink:#222222; --muted:#666666; --line:#e0e0e0; --chip:#f0f4f8;
+  --accent:#ff5a00; --bar:#111111; --bar-ink:#ffffff;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#101214; --card:#1a1d21; --ink:#eceff2; --muted:#a3abb4; --line:#2d3238; --chip:#262b31; --accent:#ff7a2e; --bar:#24282e;}
+}
+:root[data-theme="dark"]{--bg:#101214; --card:#1a1d21; --ink:#eceff2; --muted:#a3abb4; --line:#2d3238; --chip:#262b31; --accent:#ff7a2e; --bar:#24282e;}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 'Helvetica Neue',Helvetica,Arial,sans-serif}
+.league-header{max-width:800px;margin:0 auto;padding:22px 16px 16px}
+.league-header h1{margin:0;font-size:1.7rem;text-transform:uppercase;letter-spacing:.5px;line-height:1.15}
+.league-header p{margin:6px 0 0;color:var(--muted);font-size:.95rem}
+.league-header::after{content:"";display:block;height:3px;background:var(--accent);margin-top:14px}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+nav ul{list-style:none;margin:0 auto;padding:8px 12px;display:flex;gap:8px;max-width:800px}
+nav a{display:block;padding:11px 16px;min-height:44px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);text-decoration:none;font-weight:600;font-size:.95rem}
+nav a:hover,nav a:focus-visible{background:var(--accent);border-color:var(--accent);color:#fff;outline:none}
+main{max-width:800px;margin:0 auto;padding:0 16px 40px}
+.section-title{background:var(--bar);color:var(--bar-ink);font-size:.9rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:10px 14px;margin:28px 0 14px;border-left:4px solid var(--accent)}
+.note{margin:0 0 12px;color:var(--muted);font-size:.9rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:14px;margin-bottom:14px}
+.division{margin:0 0 6px;padding-bottom:6px;border-bottom:2px solid var(--line);color:var(--accent);font-size:1rem;text-transform:uppercase}
+.team-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.team-row:last-child{border-bottom:0}
+.team-name{font-weight:700;text-transform:uppercase;font-size:.95rem}
+.coach{display:block;color:var(--muted);font-size:.85rem}
+.time{flex:none;background:var(--chip);border-radius:4px;padding:5px 10px;font-weight:600;font-size:.85rem;white-space:nowrap}
+.date-header{margin-top:26px;font-weight:700;font-size:1.05rem;padding-bottom:6px;margin-bottom:10px;border-bottom:1px solid var(--ink)}
+.game{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:11px 12px;margin-bottom:8px}
+.game .time{width:76px;text-align:center;padding:6px 4px}
+.match{font-weight:700;text-transform:uppercase;font-size:.95rem}
+.match i{font-style:normal;font-weight:400;color:var(--muted);text-transform:none;padding:0 4px}
+.match small{display:block;font-weight:400;color:var(--muted);font-size:.8rem;text-transform:uppercase}
+h3.div-title{margin:20px 0 8px;font-size:1rem;color:var(--accent);text-transform:uppercase}
+details{background:var(--card);border:1px solid var(--line);border-radius:6px;margin-bottom:8px}
+summary{cursor:pointer;padding:13px 14px;min-height:46px;font-weight:700;text-transform:uppercase;font-size:.95rem}
+summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+details p{margin:0;padding:0 14px 12px;color:var(--muted);font-size:.9rem}
+summary small{font-weight:400;color:var(--muted);text-transform:none;margin-left:6px;font-size:.85rem}
+details ul{list-style:none;margin:0;padding:0 14px 8px}
+details li{padding:8px 0;border-top:1px solid var(--line)}
+</style>
 </head>
 <body>
 
-<div class="container">
-    <!-- Branding Header Section -->
-    <div class="league-header">
-        <h1>Delano Recreation Center</h1>
-        <p>GPLA Volleyball League Portal | Fall 2026 Master Directory</p>
+<header class="league-header">
+  <h1>Delano Recreation Center</h1>
+  <p>GPLA Volleyball League Portal | Fall 2026</p>
+</header>
+
+<nav aria-label="Sections">
+  <ul>
+    <li><a href="#practices">Practices</a></li>
+    <li><a href="#games">Games</a></li>
+    <li><a href="#rosters">Rosters</a></li>
+  </ul>
+</nav>
+
+<main>
+  <section id="practices">
+    <div class="section-title">Team info &amp; practice schedules</div>
+
+    <div class="card">
+      <h2 class="division">GPLA Pee-Wees</h2>
+
+      <div class="team-row"><div><span class="team-name">Future Setters</span><span class="coach">Coach Lily</span></div><span class="time">Sun 11:00 AM</span></div>
+      <div class="team-row"><div><span class="team-name">Mini Aces</span><span class="coach">Coach Alinah</span></div><span class="time">Sun 11:00 AM</span></div>
     </div>
 
-    <!-- Practice Schedules (Forced into One Column) -->
-    <div class="section-title">Team Info & Practice Schedules</div>
-    <div class="practice-column">
-        
-        <!-- Pee-Wees Card -->
-        <div class="practice-card">
-            <div class="division-header">GPLA Pee-Wees</div>
-            <div class="team-info-row">
-                <div><span class="team-name">BABY BLOCKERS</span><br><span class="coach-name">Coach Angel</span></div>
-                <div><span class="practice-time">Tues 5:30 PM</span></div>
-            </div>
-            <div class="team-info-row">
-                <div><span class="team-name">COURT CUBS</span><br><span class="coach-name">Coach Jacky</span></div>
-                <div><span class="practice-time">Tues 5:30 PM</span></div>
-            </div>
-            <div class="team-info-row">
-                <div><span class="team-name">FUTURE SETTERS</span><br><span class="coach-name">Coach Lily</span></div>
-                <div><span class="practice-time">Thurs 5:30 PM</span></div>
-            </div>
-            <div class="team-info-row">
-                <div><span class="team-name">MINI ACES</span><br><span class="coach-name">Coach Alinah</span></div>
-                <div><span class="practice-time">Thurs 5:30 PM</span></div>
-            </div>
-        </div>
-
-        <!-- Minors Card -->
-        <div class="practice-card">
-            <div class="division-header">GPLA Minors</div>
-            <div class="team-info-row">
-                <div><span class="team-name">RISE</span><br><span class="coach-name">Coach Angel</span></div>
-                <div><span class="practice-time">Tues 6:30 PM</span></div>
-            </div>
-            <div class="team-info-row">
-                <div><span class="team-name">STORM</span><br><span class="coach-name">Coach Jacky</span></div>
-                <div><span class="practice-time">Tues 6:30 PM</span></div>
-            </div>
-            <div class="team-info-row">
-                <div><span class="team-name">THRILL</span><br><span class="coach-name">Coach Richard</span></div>
-                <div><span class="practice-time">Thurs 6:30 PM</span></div>
-            </div>
-            <div class="team-info-row">
-                <div><span class="team-name">VIBE</span><br><span class="coach-name">Coach Alinah</span></div>
-                <div><span class="practice-time">Thurs 6:30 PM</span></div>
-            </div>
-        </div>
-
-        <!-- Majors Card -->
-        <div class="practice-card">
-            <div class="division-header">GPLA Majors</div>
-            <div class="team-info-row">
-                <div><span class="team-name">FURY</span><br><span class="coach-name">Coach Azucena</span></div>
-                <div><span class="practice-time">Tues 7:30 PM</span></div>
-            </div>
-            <div class="team-info-row">
-                <div><span class="team-name">IGNITE</span><br><span class="coach-name">Coach Alejandra</span></div>
-                <div><span class="practice-time">Tues 7:30 PM</span></div>
-            </div>
-            <div class="team-info-row">
-                <div><span class="team-name">SUPERNOVA</span><br><span class="coach-name">Coach Lily</span></div>
-                <div><span class="practice-time">Thurs 7:30 PM</span></div>
-            </div>
-            <div class="team-info-row">
-                <div><span class="team-name">MOJO</span><br><span class="coach-name">Coach Alinah</span></div>
-                <div><span class="practice-time">Thurs 7:30 PM</span></div>
-            </div>
-        </div>
-
-        <!-- Juniors & Seniors Card -->
-        <div class="practice-card">
-            <div class="division-header">GPLA Juniors / Seniors</div>
-            <div class="team-info-row">
-                <div><span class="team-name">GLADIATORS</span><br><span class="coach-name">Coach Azucena</span></div>
-                <div><span class="practice-time">Tues 8:30 PM</span></div>
-            </div>
-            <div class="team-info-row">
-                <div><span class="team-name">SPARTANS</span><br><span class="coach-name">Coach Alejandra</span></div>
-                <div><span class="practice-time">Tues 8:30 PM</span></div>
-            </div>
-            <div class="team-info-row">
-                <div><span class="team-name">VALKYRIES</span><br><span class="coach-name">Coach Alinah</span></div>
-                <div><span class="practice-time">Thurs 8:30 PM</span></div>
-            </div>
-            <div class="team-info-row">
-                <div><span class="team-name">WARRIORS</span><br><span class="coach-name">Coach Lily</span></div>
-                <div><span class="practice-time">Thurs 8:30 PM</span></div>
-            </div>
-        </div>
-
+    <div class="card">
+      <h2 class="division">GPLA Minors</h2>
+      <div class="team-row"><div><span class="team-name">Rise</span><span class="coach">Coach Angel</span></div><span class="time">Tues 6:30 PM</span></div>
+      <div class="team-row"><div><span class="team-name">Storm</span><span class="coach">Coach Jacky</span></div><span class="time">Tues 6:30 PM</span></div>
+      <div class="team-row"><div><span class="team-name">Thrill</span><span class="coach">Coach Richard</span></div><span class="time">Thurs 6:30 PM</span></div>
+      <div class="team-row"><div><span class="team-name">Vibe</span><span class="coach">Coach Alinah</span></div><span class="time">Thurs 6:30 PM</span></div>
     </div>
 
-    <!-- Match Game Schedule Section -->
-    <div class="section-title">League Match Schedules</div>
-
-    <!-- Week 1 -->
-    <div class="date-block">
-        <div class="date-header">Saturday, October 3, 2026</div>
-        <table>
-            <thead>
-                <tr><th>Time</th><th>Home Team</th><th>Away Team</th><th>Division</th></tr>
-            </thead>
-            <tbody>
-                <tr><td>8:30 AM</td><td>BABY BLOCKERS</td><td>COURT CUBS</td><td>GPLA PEE-WEES</td></tr>
-                <tr><td>9:15 AM</td><td>FUTURE SETTERS</td><td>MINI ACES</td><td>GPLA PEE-WEES</td></tr>
-                <tr><td>10:00 AM</td><td>RISE</td><td>STORM</td><td>GPLA MINORS</td></tr>
-                <tr><td>10:45 AM</td><td>THRILL</td><td>VIBE</td><td>GPLA MINORS</td></tr>
-                <tr><td>11:30 AM</td><td>FURY</td><td>IGNITE</td><td>GPLA MAJORS</td></tr>
-                <tr><td>12:15 PM</td><td>SUPERNOVA</td><td>MOJO</td><td>GPLA MAJORS</td></tr>
-                <tr><td>1:00 PM</td><td>GLADIATORS</td><td>SPARTANS</td><td>GPLA JUNIORS/SENIORS</td></tr>
-                <tr><td>1:45 PM</td><td>VALKYRIES</td><td>WARRIORS</td><td>GPLA JUNIORS/SENIORS</td></tr>
-            </tbody>
-        </table>
+    <div class="card">
+      <h2 class="division">GPLA Majors</h2>
+      <div class="team-row"><div><span class="team-name">Fury</span><span class="coach">Coach Azucena</span></div><span class="time">Tues 7:30 PM</span></div>
+      <div class="team-row"><div><span class="team-name">Ignite</span><span class="coach">Coach Alejandra</span></div><span class="time">Tues 7:30 PM</span></div>
+      <div class="team-row"><div><span class="team-name">Supernova</span><span class="coach">Coach Lily</span></div><span class="time">Thurs 7:30 PM</span></div>
+      <div class="team-row"><div><span class="team-name">Mojo</span><span class="coach">Coach Alinah</span></div><span class="time">Thurs 7:30 PM</span></div>
     </div>
 
-    <!-- Week 2 -->
-    <div class="date-block">
-        <div class="date-header">Saturday, October 10, 2026</div>
-        <table>
-            <thead>
-                <tr><th>Time</th><th>Home Team</th><th>Away Team</th><th>Division</th></tr>
-            </thead>
-            <tbody>
-                <tr><td>8:30 AM</td><td>FUTURE SETTERS</td><td>BABY BLOCKERS</td><td>GPLA PEE-WEES</td></tr>
-                <tr><td>9:15 AM</td><td>COURT CUBS</td><td>MINI ACES</td><td>GPLA PEE-WEES</td></tr>
-                <tr><td>10:00 AM</td><td>THRILL</td><td>RISE</td><td>GPLA MINORS</td></tr>
-                <tr><td>10:45 AM</td><td>STORM</td><td>VIBE</td><td>GPLA MINORS</td></tr>
-                <tr><td>11:30 AM</td><td>SUPERNOVA</td><td>FURY</td><td>GPLA MAJORS</td></tr>
-                <tr><td>12:15 PM</td><td>IGNITE</td><td>MOJO</td><td>GPLA MAJORS</td></tr>
-                <tr><td>1:00 PM</td><td>VALKYRIES</td><td>GLADIATORS</td><td>GPLA JUNIORS/SENIORS</td></tr>
-                <tr><td>1:45 PM</td><td>SPARTANS</td><td>WARRIORS</td><td>GPLA JUNIORS/SENIORS</td></tr>
-            </tbody>
-        </table>
+    <div class="card">
+      <h2 class="division">GPLA Juniors / Seniors</h2>
+      <div class="team-row"><div><span class="team-name">Gladiators</span><span class="coach">Coach Azucena</span></div><span class="time">Fri 7:30 PM</span></div>
+      <div class="team-row"><div><span class="team-name">Spartans</span><span class="coach">Coach Alejandra</span></div><span class="time">Fri 8:30 PM</span></div>
+      <div class="team-row"><div><span class="team-name">Valkyries</span><span class="coach">Coach Alinah</span></div><span class="time">Fri 7:30 PM</span></div>
+      <div class="team-row"><div><span class="team-name">Warriors</span><span class="coach">Coach Lily</span></div><span class="time">Fri 8:30 PM</span></div>
     </div>
+  </section>
 
-    <!-- Week 3 -->
-    <div class="date-block">
-        <div class="date-header">Saturday, October 17, 2026</div>
-        <table>
-            <thead>
-                <tr><th>Time</th><th>Home Team</th><th>Away Team</th><th>Division</th></tr>
-            </thead>
-            <tbody>
-                <tr><td>8:30 AM</td><td>MINI ACES</td><td>BABY BLOCKERS</td><td>GPLA PEE-WEES</td></tr>
-                <tr><td>9:15 AM</td><td>COURT CUBS</td><td>FUTURE SETTERS</td><td>GPLA PEE-WEES</td></tr>
-                <tr><td>10:00 AM</td><td>VIBE</td><td>RISE</td><td>GPLA MINORS</td></tr>
-                <tr><td>10:45 AM</td><td>STORM</td><td>THRILL</td><td>GPLA MINORS</td></tr>
-                <tr><td>11:30 AM</td><td>MOJO</td><td>FURY</td><td>GPLA MAJORS</td></tr>
-                <tr><td>12:15 PM</td><td>IGNITE</td><td>SUPERNOVA</td><td>GPLA MAJORS</td></tr>
-                <tr><td>1:00 PM</td><td>WARRIORS</td><td>GLADIATORS</td><td>GPLA JUNIORS/SENIORS</td></tr>
-                <tr><td>1:45 PM</td><td>SPARTANS</td><td>VALKYRIES</td><td>GPLA JUNIORS/SENIORS</td></tr>
-            </tbody>
-        </table>
-    </div>
+  <section id="games">
+    <div class="section-title">League match schedules</div>
+    <p class="note">Home team is listed first.</p>
 
-    <!-- Week 4 -->
-    <div class="date-block">
-        <div class="date-header">Sunday, October 18, 2026</div>
-        <table>
-            <thead>
-                <tr><th>Time</th><th>Home Team</th><th>Away Team</th><th>Division</th></tr>
-            </thead>
-            <tbody>
-                <tr><td>8:30 AM</td><td>COURT CUBS</td><td>BABY BLOCKERS</td><td>GPLA PEE-WEES</td></tr>
-                <tr><td>9:15 AM</td><td>MINI ACES</td><td>FUTURE SETTERS</td><td>GPLA PEE-WEES</td></tr>
-                <tr><td>10:00 AM</td><td>STORM</td><td>RISE</td><td>GPLA MINORS</td></tr>
-                <tr><td>10:45 AM</td><td>VIBE</td><td>THRILL</td><td>GPLA MINORS</td></tr>
-                <tr><td>11:30 AM</td><td>IGNITE</td><td>FURY</td><td>GPLA MAJORS</td></tr>
-                <tr><td>12:15 PM</td><td>MOJO</td><td>SUPERNOVA</td><td>GPLA MAJORS</td></tr>
-                <tr><td>1:00 PM</td><td>SPARTANS</td><td>GLADIATORS</td><td>GPLA JUNIORS/SENIORS</td></tr>
-                <tr><td>1:45 PM</td><td>WARRIORS</td><td>VALKYRIES</td><td>GPLA JUNIORS/SENIORS</td></tr>
-            </tbody>
-        </table>
-    </div>
+    <div class="date-header">Saturday, October 3, 2026</div>
+    <div class="game"><span class="time">9:15 AM</span><div class="match">Future Setters<i>vs</i>Mini Aces<small>GPLA Pee-Wees</small></div></div>
+    <div class="game"><span class="time">10:00 AM</span><div class="match">Rise<i>vs</i>Storm<small>GPLA Minors</small></div></div>
+    <div class="game"><span class="time">10:45 AM</span><div class="match">Thrill<i>vs</i>Vibe<small>GPLA Minors</small></div></div>
+    <div class="game"><span class="time">11:30 AM</span><div class="match">Fury<i>vs</i>Ignite<small>GPLA Majors</small></div></div>
+    <div class="game"><span class="time">12:15 PM</span><div class="match">Supernova<i>vs</i>Mojo<small>GPLA Majors</small></div></div>
+    <div class="game"><span class="time">1:00 PM</span><div class="match">Gladiators<i>vs</i>Spartans<small>GPLA Juniors / Seniors</small></div></div>
+    <div class="game"><span class="time">1:45 PM</span><div class="match">Valkyries<i>vs</i>Warriors<small>GPLA Juniors / Seniors</small></div></div>
 
-    <!-- Week 5 -->
-    <div class="date-block">
-        <div class="date-header">Saturday, October 24, 2026</div>
-        <table>
-            <thead>
-                <tr><th>Time</th><th>Home Team</th><th>Away Team</th><th>Division</th></tr>
-            </thead>
-            <tbody>
-                <tr><td>8:30 AM</td><td>BABY BLOCKERS</td><td>FUTURE SETTERS</td><td>GPLA PEE-WEES</td></tr>
-                <tr><td>9:15 AM</td><td>MINI ACES</td><td>COURT CUBS</td><td>GPLA PEE-WEES</td></tr>
-                <tr><td>10:00 AM</td><td>RISE</td><td>THRILL</td><td>GPLA MINORS</td></tr>
-                <tr><td>10:45 AM</td><td>VIBE</td><td>STORM</td><td>GPLA MINORS</td></tr>
-                <tr><td>11:30 AM</td><td>FURY</td><td>SUPERNOVA</td><td>GPLA MAJORS</td></tr>
-                <tr><td>12:15 PM</td><td>MOJO</td><td>IGNITE</td><td>GPLA MAJORS</td></tr>
-                <tr><td>1:00 PM</td><td>GLADIATORS</td><td>VALKYRIES</td><td>GPLA JUNIORS/SENIORS</td></tr>
-                <tr><td>1:45 PM</td><td>WARRIORS</td><td>SPARTANS</td><td>GPLA JUNIORS/SENIORS</td></tr>
-            </tbody>
-        </table>
-    </div>
+    <div class="date-header">Saturday, October 10, 2026</div>
+    <div class="game"><span class="time">9:15 AM</span><div class="match">Mini Aces<i>vs</i>Future Setters<small>GPLA Pee-Wees</small></div></div>
+    <div class="game"><span class="time">10:00 AM</span><div class="match">Thrill<i>vs</i>Rise<small>GPLA Minors</small></div></div>
+    <div class="game"><span class="time">10:45 AM</span><div class="match">Storm<i>vs</i>Vibe<small>GPLA Minors</small></div></div>
+    <div class="game"><span class="time">11:30 AM</span><div class="match">Supernova<i>vs</i>Fury<small>GPLA Majors</small></div></div>
+    <div class="game"><span class="time">12:15 PM</span><div class="match">Ignite<i>vs</i>Mojo<small>GPLA Majors</small></div></div>
+    <div class="game"><span class="time">1:00 PM</span><div class="match">Valkyries<i>vs</i>Gladiators<small>GPLA Juniors / Seniors</small></div></div>
+    <div class="game"><span class="time">1:45 PM</span><div class="match">Spartans<i>vs</i>Warriors<small>GPLA Juniors / Seniors</small></div></div>
 
-    <!-- Week 6 -->
-    <div class="date-block">
-        <div class="date-header">Sunday, November 1, 2026</div>
-        <table>
-            <thead>
-                <tr><th>Time</th><th>Home Team</th><th>Away Team</th><th>Division</th></tr>
-            </thead>
-            <tbody>
-                <tr><td>8:30 AM</td><td>BABY BLOCKERS</td><td>MINI ACES</td><td>GPLA PEE-WEES</td></tr>
-                <tr><td>9:15 AM</td><td>FUTURE SETTERS</td><td>COURT CUBS</td><td>GPLA PEE-WEES</td></tr>
-                <tr><td>10:00 AM</td><td>RISE</td><td>VIBE</td><td>GPLA MINORS</td></tr>
-                <tr><td>10:45 AM</td><td>THRILL</td><td>STORM</td><td>GPLA MINORS</td></tr>
-                <tr><td>11:30 AM</td><td>FURY</td><td>MOJO</td><td>GPLA MAJORS</td></tr>
-                <tr><td>12:15 PM</td><td>SUPERNOVA</td><td>IGNITE</td><td>GPLA MAJORS</td></tr>
-                <tr><td>1:00 PM</td><td>GLADIATORS</td><td>WARRIORS</td><td>GPLA JUNIORS/SENIORS</td></tr>
-                <tr><td>1:45 PM</td><td>VALKYRIES</td><td>SPARTANS</td><td>GPLA JUNIORS/SENIORS</td></tr>
-            </tbody>
-        </table>
-    </div>
+    <div class="date-header">Saturday, October 17, 2026</div>
+    <div class="game"><span class="time">9:15 AM</span><div class="match">Future Setters<i>vs</i>Mini Aces<small>GPLA Pee-Wees</small></div></div>
+    <div class="game"><span class="time">10:00 AM</span><div class="match">Vibe<i>vs</i>Rise<small>GPLA Minors</small></div></div>
+    <div class="game"><span class="time">10:45 AM</span><div class="match">Storm<i>vs</i>Thrill<small>GPLA Minors</small></div></div>
+    <div class="game"><span class="time">11:30 AM</span><div class="match">Mojo<i>vs</i>Fury<small>GPLA Majors</small></div></div>
+    <div class="game"><span class="time">12:15 PM</span><div class="match">Ignite<i>vs</i>Supernova<small>GPLA Majors</small></div></div>
+    <div class="game"><span class="time">1:00 PM</span><div class="match">Warriors<i>vs</i>Gladiators<small>GPLA Juniors / Seniors</small></div></div>
+    <div class="game"><span class="time">1:45 PM</span><div class="match">Spartans<i>vs</i>Valkyries<small>GPLA Juniors / Seniors</small></div></div>
 
-    <!-- Week 7 -->
-    <div class="date-block">
-        <div class="date-header">Saturday, November 7, 2026</div>
-        <table>
-            <thead>
-                <tr><th>Time</th><th>Home Team</th><th>Away Team</th><th>Division</th></tr>
-            </thead>
-            <tbody>
-                <tr><td>8:30 AM</td><td>BABY BLOCKERS</td><td>COURT CUBS</td><td>GPLA PEE-WEES</td></tr>
-                <tr><td>9:15 AM</td><td>FUTURE SETTERS</td><td>MINI ACES</td><td>GPLA PEE-WEES</td></tr>
-                <tr><td>10:00 AM</td><td>RISE</td><td>STORM</td><td>GPLA MINORS</td></tr>
-                <tr><td>10:45 AM</td><td>THRILL</td><td>VIBE</td><td>GPLA MINORS</td></tr>
-                <tr><td>11:30 AM</td><td>FURY</td><td>IGNITE</td><td>GPLA MAJORS</td></tr>
-                <tr><td>12:15 PM</td><td>SUPERNOVA</td><td>MOJO</td><td>GPLA MAJORS</td></tr>
-                <tr><td>1:00 PM</td><td>GLADIATORS</td><td>SPARTANS</td><td>GPLA JUNIORS/SENIORS</td></tr>
-                <tr><td>1:45 PM</td><td>VALKYRIES</td><td>WARRIORS</td><td>GPLA JUNIORS/SENIORS</td></tr>
-            </tbody>
-        </table>
-    </div>
+    <div class="date-header">Sunday, October 18, 2026</div>
+    <div class="game"><span class="time">9:15 AM</span><div class="match">Mini Aces<i>vs</i>Future Setters<small>GPLA Pee-Wees</small></div></div>
+    <div class="game"><span class="time">10:00 AM</span><div class="match">Storm<i>vs</i>Rise<small>GPLA Minors</small></div></div>
+    <div class="game"><span class="time">10:45 AM</span><div class="match">Vibe<i>vs</i>Thrill<small>GPLA Minors</small></div></div>
+    <div class="game"><span class="time">11:30 AM</span><div class="match">Ignite<i>vs</i>Fury<small>GPLA Majors</small></div></div>
+    <div class="game"><span class="time">12:15 PM</span><div class="match">Mojo<i>vs</i>Supernova<small>GPLA Majors</small></div></div>
+    <div class="game"><span class="time">1:00 PM</span><div class="match">Spartans<i>vs</i>Gladiators<small>GPLA Juniors / Seniors</small></div></div>
+    <div class="game"><span class="time">1:45 PM</span><div class="match">Warriors<i>vs</i>Valkyries<small>GPLA Juniors / Seniors</small></div></div>
 
-</div>
+    <div class="date-header">Saturday, October 24, 2026</div>
+    <div class="game"><span class="time">9:15 AM</span><div class="match">Future Setters<i>vs</i>Mini Aces<small>GPLA Pee-Wees</small></div></div>
+    <div class="game"><span class="time">10:00 AM</span><div class="match">Rise<i>vs</i>Thrill<small>GPLA Minors</small></div></div>
+    <div class="game"><span class="time">10:45 AM</span><div class="match">Vibe<i>vs</i>Storm<small>GPLA Minors</small></div></div>
+    <div class="game"><span class="time">11:30 AM</span><div class="match">Fury<i>vs</i>Supernova<small>GPLA Majors</small></div></div>
+    <div class="game"><span class="time">12:15 PM</span><div class="match">Mojo<i>vs</i>Ignite<small>GPLA Majors</small></div></div>
+    <div class="game"><span class="time">1:00 PM</span><div class="match">Gladiators<i>vs</i>Valkyries<small>GPLA Juniors / Seniors</small></div></div>
+    <div class="game"><span class="time">1:45 PM</span><div class="match">Warriors<i>vs</i>Spartans<small>GPLA Juniors / Seniors</small></div></div>
+
+    <div class="date-header">Sunday, November 1, 2026</div>
+    <div class="game"><span class="time">9:15 AM</span><div class="match">Mini Aces<i>vs</i>Future Setters<small>GPLA Pee-Wees</small></div></div>
+    <div class="game"><span class="time">10:00 AM</span><div class="match">Rise<i>vs</i>Vibe<small>GPLA Minors</small></div></div>
+    <div class="game"><span class="time">10:45 AM</span><div class="match">Thrill<i>vs</i>Storm<small>GPLA Minors</small></div></div>
+    <div class="game"><span class="time">11:30 AM</span><div class="match">Fury<i>vs</i>Mojo<small>GPLA Majors</small></div></div>
+    <div class="game"><span class="time">12:15 PM</span><div class="match">Supernova<i>vs</i>Ignite<small>GPLA Majors</small></div></div>
+    <div class="game"><span class="time">1:00 PM</span><div class="match">Gladiators<i>vs</i>Warriors<small>GPLA Juniors / Seniors</small></div></div>
+    <div class="game"><span class="time">1:45 PM</span><div class="match">Valkyries<i>vs</i>Spartans<small>GPLA Juniors / Seniors</small></div></div>
+
+    <div class="date-header">Saturday, November 7, 2026</div>
+    <div class="game"><span class="time">9:15 AM</span><div class="match">Future Setters<i>vs</i>Mini Aces<small>GPLA Pee-Wees</small></div></div>
+    <div class="game"><span class="time">10:00 AM</span><div class="match">Rise<i>vs</i>Storm<small>GPLA Minors</small></div></div>
+    <div class="game"><span class="time">10:45 AM</span><div class="match">Thrill<i>vs</i>Vibe<small>GPLA Minors</small></div></div>
+    <div class="game"><span class="time">11:30 AM</span><div class="match">Fury<i>vs</i>Ignite<small>GPLA Majors</small></div></div>
+    <div class="game"><span class="time">12:15 PM</span><div class="match">Supernova<i>vs</i>Mojo<small>GPLA Majors</small></div></div>
+    <div class="game"><span class="time">1:00 PM</span><div class="match">Gladiators<i>vs</i>Spartans<small>GPLA Juniors / Seniors</small></div></div>
+    <div class="game"><span class="time">1:45 PM</span><div class="match">Valkyries<i>vs</i>Warriors<small>GPLA Juniors / Seniors</small></div></div>
+    <!-- Add more games by copying a row above. Add a new date-header for each new match day. -->
+  </section>
+
+  <section id="rosters">
+    <div class="section-title">Rosters</div>
+    <p class="note">Tap a team to see its players.</p>
+    <h3 class="div-title">Pee-Wees</h3>
+
+    <details><summary>Future Setters <small>Coach Lily</small></summary><p>10 players</p><ul><li>Brigitte Osorio</li><li>Ellie Simental</li><li>Kally Chase</li><li>Kayleen Jimenez</li><li>Khalilia Hernandez</li><li>Leilani Pereira Moore</li><li>Luna Santiago Perez</li><li>Olivia Lopez</li><li>Riley Mattox</li><li>Samantha Gonzalez</li></ul></details>
+    <details><summary>Mini Aces <small>Coach Alinah</small></summary><p>10 players</p><ul><li>Breanna Ordono</li><li>Camila Barragan</li><li>Elisa Friedman</li><li>Emma Rodriguez</li><li>Jaelani Claros</li><li>Madalyn Magdaleno</li><li>Maddison Garcia</li><li>Paulette Mazariegos</li><li>Priscila Alvarado</li><li>Ruhanah Ibrahim</li></ul></details>
+    <h3 class="div-title">Minors</h3>
+    <details><summary>Rise <small>Coach Angel</small></summary><p>11 players</p><ul><li>Arianna Ramirez Burciaga</li><li>Jayashri Graham</li><li>Kaiah Woo</li><li>Keila Caballeros</li><li>Kelly Coari</li><li>Kimberly Castelar</li><li>Mai Le</li><li>Mikaila Evangelista</li><li>Natalie Casia</li><li>Sofia Gomez</li><li>Sofia Palafox</li></ul></details>
+    <details><summary>Storm <small>Coach Jacky</small></summary><p>10 players</p><ul><li>Amanah Ibrahim</li><li>Analia Blaylock</li><li>Andrea Tapia</li><li>Aubrey Ware</li><li>Avril Posada</li><li>Esmay Chavez</li><li>Genesis Lopez Ovalle</li><li>Jolie Soler</li><li>Ruby Orozco</li><li>Vida Valencia</li></ul></details>
+    <details><summary>Thrill <small>Coach Richard</small></summary><p>10 players</p><ul><li>Amara Galindo</li><li>Anabelle Dominguez</li><li>Ava Cabrera</li><li>Camila Melara-Cupul</li><li>Jade Tan</li><li>Julianna Digregorio</li><li>Kennedy Ronquillo</li><li>Kiara Rodriguez</li><li>Mia Cruz</li><li>Sophia Libaryan</li></ul></details>
+    <details><summary>Vibe <small>Coach Alinah</small></summary><p>11 players</p><ul><li>Athena Davis</li><li>Darlene Ramirez</li><li>Delilah Barnett</li><li>Juliet Hernandez Yanez</li><li>Leiaura Leddy</li><li>Leticia Guzman</li><li>Luna Ramirez</li><li>Marina Stelnikova</li><li>Sydney Mitchell</li><li>Taya Vo</li><li>Yaritza Olan</li></ul></details>
+    <h3 class="div-title">Majors</h3>
+    <details><summary>Fury <small>Coach Azucena</small></summary><p>10 players</p><ul><li>Addison Cieslak</li><li>Adina Taban</li><li>Ariana Garcia</li><li>Bethany Lopez</li><li>Bivian Alatorre</li><li>Emely Espinoza</li><li>Estela Carpio</li><li>Melanie Cruz</li><li>Miylene Garcia</li><li>Rosemary Baltazar</li></ul></details>
+    <details><summary>Ignite <small>Coach Alejandra</small></summary><p>10 players</p><ul><li>Alison G. Chic Reyes</li><li>Bianca Blanco</li><li>Citlali Ruiz</li><li>Galilea Solis</li><li>Hennessy Jimenez</li><li>J&#x27;mya Ross</li><li>Leslie Lopez</li><li>London Brown</li><li>Scarlet Chavez</li><li>Valerie Chavez</li></ul></details>
+    <details><summary>Supernova <small>Coach Lily</small></summary><p>10 players</p><ul><li>Allysen Mazariego</li><li>Ana Salinas</li><li>Emily Simental</li><li>Imani Hendrickson</li><li>Michelle Razo</li><li>Nathalie Rivas</li><li>Nili Miller</li><li>Suneha Graham</li><li>Yareli Rodriguez</li><li>Ysobel Mari Ramos</li></ul></details>
+    <details><summary>Mojo <small>Coach Alinah</small></summary><p>10 players</p><ul><li>Angelina Ramirez</li><li>Camila Mejia</li><li>Ivanna Henriquez</li><li>Karolyn Flores</li><li>Laila Isais</li><li>Mary Intia</li><li>Noelia Diaz Torres</li><li>Perla Murillo</li><li>Sherlyn Osorio</li><li>Victoria Martinez</li></ul></details>
+    <h3 class="div-title">Juniors / Seniors</h3>
+    <details><summary>Gladiators <small>Coach Azucena</small></summary><p>10 players</p><ul><li>Angela Montes</li><li>April Osorio</li><li>Ashely Cornejo</li><li>Bella Zamora</li><li>Evolet Rosales</li><li>Isabella Sophia Aguilar</li><li>Jayslyn De Rosas</li><li>Makayla Chung</li><li>Maven Anilao</li><li>Samantha Tingson</li></ul></details>
+    <details><summary>Spartans <small>Coach Alejandra</small></summary><p>9 players</p><ul><li>Arielle Hernandez</li><li>Daisy Gutierrez</li><li>Elise Yoshimura</li><li>Isabella Garcia</li><li>Jasmine Rivas</li><li>Jenelly Mejia</li><li>Nancy Manon</li><li>Sarah Demeke</li><li>Stephanie Maravilla</li></ul></details>
+    <details><summary>Valkyries <small>Coach Alinah</small></summary><p>10 players</p><ul><li>Aubrey Cantellan</li><li>Delilah Ojeda</li><li>Ella Bardov</li><li>Isabella Henriquez</li><li>Izabella Castillo</li><li>Kamila T Medina</li><li>Lila Valdez</li><li>Lucia Goldberg</li><li>Talia Bardov</li><li>Tatiana Valencia</li></ul></details>
+    <details><summary>Warriors <small>Coach Lily</small></summary><p>10 players</p><ul><li>Anstatia Mae Remondeulaz</li><li>Ashley Borrego</li><li>Brianna Funes</li><li>Chloe Narvaez</li><li>Dasha Coari</li><li>Emily Cano</li><li>Hailey Fierro</li><li>Roselyn Baltazar</li><li>Samantha Aguilar</li><li>Yaretzi Quevedo</li></ul></details>
+  </section>
+</main>
 
 </body>
 </html>
